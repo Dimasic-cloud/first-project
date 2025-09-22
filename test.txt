@@ -1,0 +1,3 @@
+hello world
+i'm dima
+This file is a test file for counting
