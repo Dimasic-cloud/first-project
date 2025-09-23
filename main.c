@@ -1,15 +1,21 @@
 #include <stdio.h>
 #define MAX_SIZE 100
 
-int counter(FILE* fime);
+typedef struct {
+    int nb, nw, nl;
+} Length;
+
+Length counter(Length* len, FILE* file);
 
 int main()
 {
     char s[MAX_SIZE] = {0};
-    int cb, cw, cl;
-
+    Length len = {0, 0, 0};
+    Length* len_ptr = &len;
     int c, i = 0;
-    while ((c = getchar()) != EOF) {
+
+    printf("wride filename");
+    while ((c = getchar()) != '\n') {
         if (i == 100) {
             printf("имя файла должно быть меньше, чем 99 символов, включая его расширение");
             return 1;
@@ -25,35 +31,36 @@ int main()
         return 2;
     }
 
-    cb, cw, cl = counter(f);
-    printf("количество: байт = %d, слов = %d, строк = %d\n", cb, cw, cl);
+    counter(len_ptr, f);
+    printf("quantity: byte = %d, words = %d, lines = %d\n", len.nb, len.nw, len.nl);
 
     fclose(f);
     
     return 0;
 }
 
-int counter(FILE* f)
+Length counter(Length* l, FILE* f)
 {
-    int c, cw=0, cl=0, cb=0;
+    int c;
     char is_space = 0;
 
     while ((c = fgetc(f)) != EOF) {
-        cb += sizeof(c);
+        l->nb += sizeof(c);
 
         if (c == ' ') {
-            if (is_space)
-                cw += 1;
+            if (is_space) {
+                l->nw += 1;
+            }
 
             is_space = 1;
         }
         else {
-            if (c = '\n') {
-                cl += 1;
+            if (c == '\n') {
+                l->nl += 1;
             }
             is_space = 1;
         }
     }
 
-    return cb, cw, cl;
+    return* l;
 }
